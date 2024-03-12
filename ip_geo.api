@@ -1,0 +1,53 @@
+syntax = "v1"
+
+info (
+	title:   "IP 地理位置服务"
+	desc:    ""
+	author:  "ziyi"
+	email:   "willsun@lilith.com"
+	version: "1.0"
+)
+
+// ----------------------------------------------------------------
+// 健康检查接口
+@server (
+	group:   healthz
+	timeout: 100ms
+)
+service ip_geo-api {
+	@doc "健康检查"
+	@handler healthz
+	get /healthz
+}
+
+@server (
+	timeout:    5s
+	middleware: IpRateLimitMiddleware
+)
+service ip_geo-api {
+	@handler GetIpGeo
+	get /api/ip (GetIpGeoRequest) returns (GetIpGeoResponse)
+}
+
+type (
+	GetIpGeoRequest {
+		IpAddr string `form:"ip_addr"`
+	}
+	GetIpGeoResponse {
+		DBVersion     string `json:"db_version"` // 数据库版本
+		ContinentCode string `json:"continent_code"` // 大洲代码
+		Country       string `json:"country"` // 国家/地区
+		CountryCode   string `json:"country_code"` // 国家代码
+		Region        string `json:"region"` // 省、州
+		City          string `json:"city"` // 城市
+		District      string `json:"district"` // 区县
+		AreaCode      string `json:"area_code"` // 区域代码
+		Isp           string `json:"isp"` // 运营商
+		ISPDomain     string `json:"isp_domain"` // 运营商域名
+		ZipCode       string `json:"zip_code"` // 邮编
+		Latitude      string `json:"latitude"` // 纬度
+		Longitude     string `json:"longitude"` // 经度
+		Timezone      string `json:"timezone"` // 时区
+	}
+)
+

@@ -1,0 +1,20 @@
+Name: ip_geo
+Host: 0.0.0.0
+Port: 8080
+
+RedisConf:
+  Type: node
+  Host: ${REDIS_HOST}
+  Pass: ${REDIS_PASS}
+  Tls: ${REDIS_TLS}
+
+DataSyncConfig:
+  DownloadUrl: "https://app.ipdatacloud.com/customer/offline_file_oss?"
+  SyncCron: "22 5 * * *"
+
+RateLimit:
+  GlobalLimit: 1
+  LimitPerIp: 1
+
+AccessKey: ''
+AccessSecret: ''
